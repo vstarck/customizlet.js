@@ -1,6 +1,26 @@
 <!DOCUMENT html>
 <html>
-<head></head>
+<head>
+    <meta charset='utf-8'>
+    <title>Box</title>
+    <style type="text/css">
+        .box {
+            height: 100px;
+            width: 100px;
+            margin: 10px;
+        }
+
+        .red {
+            background-color: #f00;
+        }
+        .green {
+            background-color: #0f0;
+        }
+        .blue {
+            background-color: #00f;
+        }
+    </style>
+</head>
 <body>
 <script>
 	;(function(g){
@@ -9,13 +29,10 @@
 		CZ = {};
 		d = document;
 		
-		if(!d.querySelectorAll || !d.createElement('canvas').getContext) {
+		if(!d.querySelectorAll || !d.createElement('canvas').getContext || ![].forEach) {
 			alert('Old browser is old!');
 			return;
 		}
-		
-		CZ.toS = function(o) { return Object.prototype.toString.call(o) };
-		CZ.isArray = Array.isArray || function(o) { return CZ.toS(o) == '[object Array]'}
 		
 		CZ.filters = {
 			grayscale: function(r, g, b, a, index, arguments) {
@@ -24,37 +41,47 @@
 			}
 		};
 		
-		CZ.$ = $ = function(sel, root){ 
-			if(!(this instanceof $)) return new $(sel, root);
-			this.e = [].slice.call((root || document).querySelectorAll(sel));
+		CZ.$ = $ = function(sel, root){
+			return [].slice.call((root || document).querySelectorAll(sel));
 		};
 
-		$.p = $.prototype;
-		
-		$.p.each = function(fn) {
-			this.e.forEach(fn);
-			return this;
-		};
-		
-		$.p.map = function(fn) {			
-		};
-		
 		CZ.reset = " margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;color:inherit;line-height:inherit;";
 		
 		function fetchFilters() {
-			$('.__cz-row').map(function(c) {
-				
-			});
-		};
-		
-		CZ.f = function() {};
+            return $('.__cz-row').map(function(c) {
+                return $('select', c)[0].value
+            });
+		}
+
+        function fetchElements() {
+            var e, filtered, ignore;
+
+            e = $('*');
+
+            filtered = [];
+            ignore = ['head', 'title', 'meta', 'style', 'script'];
+
+            for(var i = 0, l = e.length; i < l; i++) {
+                if(e[i].className.indexOf('__cz') !== -1) continue;
+                if(ignore.indexOf(e[i].tagName.toLowerCase()) !== -1) continue;
+
+                filtered.push(e[i]);
+            }
+
+            return filtered;
+        }
+
+		CZ.f = function() {
+            console.log('filters: ', fetchFilters());
+            console.log('elements', fetchElements());
+        };
 		
 		g.__CZ = CZ;
 	})(window);
 </script>
 <div class="__cz" style="width:320px;border:solid 1px #eee;position:absolute;top:15px;right:10px;padding:30px 10px 60px;border-radius:5px;background:#fff;-webkit-box-shadow: 0px 0px 3px 1px #000;box-shadow: 0px 0px 3px 1px #000; ">
-	<div class="__cz" style="font-weight:bold;font-size:18px;cursor:pointer;position:absolute;top:0px;right:8px">×</div>
-	<div class="__cz" style="font-size:12px;position:absolute;top:4px;left:8px;font-family:Tahoma">CUSTOMIZLET 0.1</div>
+	<div class="__cz" style="font-weight:bold;font-size:18px;cursor:pointer;position:absolute;top:0px;right:8px;font-family:Tahoma,Verdana">x</div>
+	<div class="__cz" style="font-size:12px;position:absolute;top:4px;left:8px;font-family:Tahoma,Verdana">CUSTOMIZLET 0.1</div>
 	<div class="__cz __cz-row">
 		<select class="__cz" style="width: 150px">
 			<option class="__cz">filter</option>
@@ -66,6 +93,11 @@
 		<button class="__cz">Close</button>
 	</div>
 </div>
+
+
+<div class="box red"></div>
+<div class="box green"></div>
+<div class="box blue"></div>
 
 </body>
 </html>

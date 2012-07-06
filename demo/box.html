@@ -1,0 +1,71 @@
+<!DOCUMENT html>
+<html>
+<head></head>
+<body>
+<script>
+	;(function(g){
+		var d, CZ, $;
+
+		CZ = {};
+		d = document;
+		
+		if(!d.querySelectorAll || !d.createElement('canvas').getContext) {
+			alert('Old browser is old!');
+			return;
+		}
+		
+		CZ.toS = function(o) { return Object.prototype.toString.call(o) };
+		CZ.isArray = Array.isArray || function(o) { return CZ.toS(o) == '[object Array]'}
+		
+		CZ.filters = {
+			grayscale: function(r, g, b, a, index, arguments) {
+				var avg = 0.3  * r + 0.59 * g + 0.11 * b;
+				return [avg, avg, avg, 255];
+			}
+		};
+		
+		CZ.$ = $ = function(sel, root){ 
+			if(!(this instanceof $)) return new $(sel, root);
+			this.e = [].slice.call((root || document).querySelectorAll(sel));
+		};
+
+		$.p = $.prototype;
+		
+		$.p.each = function(fn) {
+			this.e.forEach(fn);
+			return this;
+		};
+		
+		$.p.map = function(fn) {			
+		};
+		
+		CZ.reset = " margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;color:inherit;line-height:inherit;";
+		
+		function fetchFilters() {
+			$('.__cz-row').map(function(c) {
+				
+			});
+		};
+		
+		CZ.f = function() {};
+		
+		g.__CZ = CZ;
+	})(window);
+</script>
+<div class="__cz" style="width:320px;border:solid 1px #eee;position:absolute;top:15px;right:10px;padding:30px 10px 60px;border-radius:5px;background:#fff;-webkit-box-shadow: 0px 0px 3px 1px #000;box-shadow: 0px 0px 3px 1px #000; ">
+	<div class="__cz" style="font-weight:bold;font-size:18px;cursor:pointer;position:absolute;top:0px;right:8px">×</div>
+	<div class="__cz" style="font-size:12px;position:absolute;top:4px;left:8px;font-family:Tahoma">CUSTOMIZLET 0.1</div>
+	<div class="__cz __cz-row">
+		<select class="__cz" style="width: 150px">
+			<option class="__cz">filter</option>
+			<option class="__cz" value="grayscale">Grayscale</option>
+		</select>
+	</div>
+	<div  class="__cz"style="width:140px;position:absolute;bottom:5px;right:10px;text-align:right">
+		<button class="__cz" onclick="__CZ.f()">Apply</button>
+		<button class="__cz">Close</button>
+	</div>
+</div>
+
+</body>
+</html>

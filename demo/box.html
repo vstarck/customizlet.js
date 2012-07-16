@@ -5,8 +5,8 @@
     <title>Box</title>
     <style type="text/css">
         .box {
-            height: 120px;
-            width: 120px;
+            height: 100px;
+            width: 100px;
             margin: 10px;
         }
 
@@ -19,76 +19,85 @@
         .blue {
             background-color: #00f;
         }
-	
-		.bg1 {
-			background-image: url('120x120_1.jpg');
-		}
-	
-		.bg2 {
-			background-image: url('120x120_2.jpg');
-		}
-	
-		.bg3 {
-			background-image: url('120x120_3.jpg');
-		}
-		
-		img {
-			position: absolute;
-			border: none;
-		}
-		
-		.big {
-			top: 10px;
-			left: 150px;		
-		}
-		
-		.small {
-			left: 760px;		
-		}
-		
-		.img1 {
-			top: 10px;
-		}
-		.img2 {
-			top: 140px;
-		}
-		.img3 {
-			top: 270px;
-		}
-		
-		.img4 {
-			top: 400px;
-		}
-		.img5 {
-			top: 530px;
-		}
-		.img6 {
-			top: 660px;
-		}
     </style>
 </head>
 <body>
 <script>
+	;(function(g){
+		var d, CZ, $;
 
+		CZ = {};
+		d = document;
+		
+		if(!d.querySelectorAll || !d.createElement('canvas').getContext || ![].forEach) {
+			alert('Old browser is old!');
+			return;
+		}
+		
+		CZ.filters = {
+			grayscale: function(r, g, b, a, index, arguments) {
+				var avg = 0.3  * r + 0.59 * g + 0.11 * b;
+				return [avg, avg, avg, 255];
+			}
+		};
+		
+		CZ.$ = $ = function(sel, root){
+			return [].slice.call((root || document).querySelectorAll(sel));
+		};
+
+		CZ.reset = " margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;color:inherit;line-height:inherit;";
+		
+		function fetchFilters() {
+            return $('.__cz-row').map(function(c) {
+                return $('select', c)[0].value
+            });
+		}
+
+        function fetchElements() {
+            var e, filtered, ignore;
+
+            e = $('*');
+
+            filtered = [];
+            ignore = ['head', 'title', 'meta', 'style', 'script'];
+
+            for(var i = 0, l = e.length; i < l; i++) {
+                if(e[i].className.indexOf('__cz') !== -1) continue;
+                if(ignore.indexOf(e[i].tagName.toLowerCase()) !== -1) continue;
+
+                filtered.push(e[i]);
+            }
+
+            return filtered;
+        }
+
+		CZ.f = function() {
+            console.log('filters: ', fetchFilters());
+            console.log('elements', fetchElements());
+        };
+		
+		g.__CZ = CZ;
+	})(window);
 </script>
+<div class="__cz" style="width:320px;border:solid 1px #eee;position:absolute;top:15px;right:10px;padding:30px 10px 60px;border-radius:5px;background:#fff;-webkit-box-shadow: 0px 0px 3px 1px #000;box-shadow: 0px 0px 3px 1px #000; ">
+	<div class="__cz" style="font-weight:bold;font-size:18px;cursor:pointer;position:absolute;top:0px;right:8px;font-family:Tahoma,Verdana">x</div>
+	<div class="__cz" style="font-size:12px;position:absolute;top:4px;left:8px;font-family:Tahoma,Verdana">CUSTOMIZLET 0.1</div>
+	<div class="__cz __cz-row">
+		<select class="__cz" style="width: 150px">
+			<option class="__cz">filter</option>
+			<option class="__cz" value="grayscale">Grayscale</option>
+		</select>
+	</div>
+	<div  class="__cz"style="width:140px;position:absolute;bottom:5px;right:10px;text-align:right">
+		<button class="__cz" onclick="__CZ.f()">Apply</button>
+		<button class="__cz">Close</button>
+	</div>
+</div>
 
-<a class="bookmarklet" href="javascript:(function(){var%20script=document.createElement('script');script.src='http://localhost/customizlet.js';document.body.appendChild(script);})()">
-CUSTOMIZLET!
-</a>
 
 <div class="box red"></div>
 <div class="box green"></div>
 <div class="box blue"></div>
-<div class="box bg1"></div>
-<div class="box bg2"></div>
-<div class="box bg3"></div>
-<img class="big" src="img.jpg" />
-<img class="small img1" src="120x120_1.jpg" />
-<img class="small img2" src="120x120_2.jpg" />
-<img class="small img3" src="120x120_3.jpg" />
-<img class="small img4" src="120x120_1.jpg" />
-<img class="small img5" src="120x120_2.jpg" />
-<img class="small img6" src="120x120_3.jpg" />
 
 </body>
 </html>
